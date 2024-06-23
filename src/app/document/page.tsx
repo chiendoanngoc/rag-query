@@ -108,10 +108,22 @@ const Page: React.FC = () => {
     if (file) {
       setLoading(true);
       try {
-        const call = httpsCallable(functions, "uploadDocument");
-        const data = { buffer: base64String, fileName };
+        // const call = httpsCallable(functions, "uploadDocument");
+        const callAPI = async (body: object) => {
+          try {
+            const res = await fetch('http://localhost:3000/uploadDocument', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+            const data = await res.json();
+            console.log(data);
+            console.log(data.hello);
+            console.log(body);
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        const data = { "buffer": base64String, "fileName": fileName };
         console.log("uploading", data);
-        await call(data);
+        // await call();
+        await callAPI(data);
       } catch (e) {
         console.warn(e);
       }
